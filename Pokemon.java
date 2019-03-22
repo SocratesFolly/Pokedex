@@ -6,7 +6,7 @@ public class Pokemon {
     private String power;
 
     // Constructor
-    public Pokemon(String name, int number, String type, int hitPoints, String power) {
+    public Pokemon(int number, String name, int hitPoints, String type,  String power) {
         this.name = name;
         this.number = number;
         this.type = type;
@@ -29,5 +29,9 @@ public class Pokemon {
 
     public String getType() {
         return type;
+    }
+
+    public void printPokemon(){
+        System.out.println("Number: " + this.number + ", Name: " + this.name + ", CP: " + this.hitPoints + ", Type: " + this.type);
     }
 }

@@ -2,11 +2,12 @@ import java.io.File;
 import java.util.Scanner;
 
 public class Pokedex {
-    private String[][] initialPokedex;
+    private String[][] pokedex;
+    private Pokemon[] finalPokedex;
 
     // Pokedex constructor
     public Pokedex(File file) throws Exception {
-        this.initialPokedex = processFile(file);
+        this.pokedex = processFile(file);
     }
 
     // processes input file into 2D jagged array
@@ -18,28 +19,29 @@ public class Pokedex {
 
         int size = checkFileLength(sc);
 
-        initialPokedex = new String[size][];               // initializes 2d array corresponding to length of file
+        pokedex = new String[size][];               // initializes 2d array corresponding to length of file
 
         while (sc2.hasNextLine()) {
             line = sc2.nextLine();
             String[] processedLine = line.split(",", 0);
-            initialPokedex[counter] = new String[processedLine.length];
+            pokedex[counter] = new String[processedLine.length];
             for (int i = 0; i < processedLine.length; i++) {
-                initialPokedex[counter][i] = processedLine[i];
+                pokedex[counter][i] = processedLine[i];
             }
             counter++;
         }
-        return initialPokedex;
+        finalPokedex = objectify();
+        return pokedex;
     }
 
     // parses 2d array into array of Pokemon Objects
     public Pokemon[] objectify(){
-        Pokemon[] pokemonList = new Pokemon[initialPokedex.length];
-        for (int i = 0; i < initialPokedex.length; i++){
-            Pokemon pokemon = new Pokemon(initialPokedex[i][0], Integer.parseInt(initialPokedex[i][1]), initialPokedex[i][2], Integer.parseInt(initialPokedex[i][3]), initialPokedex[i][4]);
+        Pokemon[] pokemonList = new Pokemon[pokedex.length];
+        for (int i = 0; i < pokedex.length; i++){
+            Pokemon pokemon = new Pokemon(Integer.parseInt(pokedex[i][0]), pokedex[i][1], Integer.parseInt(pokedex[i][2]),pokedex[i][3], pokedex[i][4]);
             pokemonList[i] = pokemon;
         }
-        
+
         return pokemonList;
     }
 
@@ -57,16 +59,16 @@ public class Pokedex {
 
 
     public void printPokedex() {
-        for (int i = 0; i < initialPokedex.length; i++) {
-            for (int j = 0; j < initialPokedex[i].length; j++) {
-                System.out.println(initialPokedex[i][j]);
+        for (int i = 0; i < pokedex.length; i++) {
+            for (int j = 0; j < pokedex[i].length; j++) {
+                System.out.println(pokedex[i][j]);
             }
         }
     }
 
     public String[][] getPokedex() {
-        System.out.println(initialPokedex);
-        return initialPokedex;
+        System.out.println(pokedex);
+        return pokedex;
     }
 
     public void printMenu() throws Exception {
@@ -106,32 +108,37 @@ public class Pokedex {
         }
     }
 
-    public String lookupByName(){
+    public void lookupByName(){
         Scanner NameScanner = new Scanner(System.in);
         System.out.println("Enter a Pokemon name: ");
         String userIn = NameScanner.next();
 
-        for (String[] i : initialPokedex){
+        for (String[] i : pokedex){
             if (i[0] == userIn){
                 printPokemon();
             } else {
                 System.out.println("Pokemon is not in Pokedex");
             }
         }
-
-        return
     }
 
-    public String lookupByNumber(){
-        return something
+    public void lookupByNumber(){
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Enter a Pokemon Number: ");
+        int num = scan.nextInt();
+        for (int i = 0; i < finalPokedex.length; i++) {
+            if (num == finalPokedex[i].getNumber()){
+                finalPokedex[i].printPokemon();
+            }
+        }
     }
 
-    public String lookupByType(){
-        return something
+    public void lookupByType(){
+        //todo
     }
 
-    public String averageHitPoints(){
-        return something
+    public void averageHitPoints(){
+        //todo
     }
 
     public void printPokemon(){
@@ -139,9 +146,9 @@ public class Pokedex {
     }
 
     public static void main(String[] args) throws Exception {
-        File file = new File("initialPokedex.txt");
-        Pokedex initialPokedex = new Pokedex(file);
-        Pokemon[] pokedex = initialPokedex.objectify();
+        File file = new File("pokedex.txt");
+        Pokedex pokedex = new Pokedex(file);
+        //Pokemon[] pokedex = pokedex.objectify();
 
 
 
