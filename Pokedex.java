@@ -58,20 +58,7 @@ public class Pokedex {
     }
 
 
-    public void printPokedex() {
-        for (int i = 0; i < pokedex.length; i++) {
-            for (int j = 0; j < pokedex[i].length; j++) {
-                System.out.println(pokedex[i][j]);
-            }
-        }
-    }
-
-    public String[][] getPokedex() {
-        System.out.println(pokedex);
-        return pokedex;
-    }
-
-    public void printMenu() throws Exception {
+    public int printMenu() {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("1. Print Pokedex");
@@ -85,9 +72,11 @@ public class Pokedex {
 
         int input = scanner.nextInt();
         menuChoice(input);
+        return input;
     }
 
     public void menuChoice(int choice){
+
         switch(choice){
             case 1: printPokedex();
             break;
@@ -108,18 +97,25 @@ public class Pokedex {
         }
     }
 
+    public void printPokedex() {
+        for (int i = 0; i < finalPokedex.length; i++) {
+            finalPokedex[i].printPokemon();
+        }
+        System.out.println();
+    }
+
     public void lookupByName(){
         Scanner NameScanner = new Scanner(System.in);
         System.out.println("Enter a Pokemon name: ");
         String userIn = NameScanner.next();
+        for (int i = 0; i < finalPokedex.length; i++) {
+            if (finalPokedex[i].getName().equals(userIn)){
+                finalPokedex[i].printPokemon();
+                return;
 
-        for (String[] i : pokedex){
-            if (i[0] == userIn){
-                printPokemon();
-            } else {
-                System.out.println("Pokemon is not in Pokedex");
             }
         }
+        System.out.println("Pokemon is not in Pokedex");
     }
 
     public void lookupByNumber(){
@@ -129,29 +125,42 @@ public class Pokedex {
         for (int i = 0; i < finalPokedex.length; i++) {
             if (num == finalPokedex[i].getNumber()){
                 finalPokedex[i].printPokemon();
+                return;
             }
         }
+        System.out.println("That number is not in the Pokedex");
     }
 
     public void lookupByType(){
-        //todo
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Enter a Pokemon Type: ");
+        String answer = scan.next();
+        int count = 0;
+        for (int i = 0; i < finalPokedex.length; i++) {
+            if (finalPokedex[i].getType().equals(answer)){
+                count++;
+            }
+        }
+        System.out.print("Number of Pokemon that contain type " +  answer + " =  " + count + "\n\n");
     }
 
     public void averageHitPoints(){
-        //todo
-    }
-
-    public void printPokemon(){
-        // todo
+        float sum = 0;
+        float divisor = finalPokedex.length;
+        for (int i = 0; i < divisor; i++) {
+            sum += finalPokedex[i].getHitPoints();
+        }
+        float average = sum / divisor;
+        System.out.println("Average Pokemon combat points = " + String.format("%.2f", average) + "\n");
     }
 
     public static void main(String[] args) throws Exception {
         File file = new File("pokedex.txt");
         Pokedex pokedex = new Pokedex(file);
-        //Pokemon[] pokedex = pokedex.objectify();
 
-
-
-
+        int userChoice = -1;
+        while(userChoice != 6){
+            userChoice = pokedex.printMenu();
+        }
     }
 }
